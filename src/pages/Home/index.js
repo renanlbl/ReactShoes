@@ -1,101 +1,48 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { MdAddShoppingCart } from 'react-icons/md';
+import api from '../../services/api';
+import { formatPrice } from '../../util/format';
 
 import { ProductList } from './styles';
 
-export default function Home() {
-  return (
-    <ProductList>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-olympikus-exact-masculino/20/D22-2020-120/D22-2020-120_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
+export default class Home extends Component {
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-olympikus-exact-masculino/20/D22-2020-120/D22-2020-120_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
+  state = {
+    products: []
+  }
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-olympikus-exact-masculino/20/D22-2020-120/D22-2020-120_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
+  async componentDidMount() {
+    const response = await api.get('products')
+    const data = response.data.map(product => ({
+      ...product,
+      priceFormatted: formatPrice(product.price)
+    }));
+    this.setState({ products: data })
+  }
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-olympikus-exact-masculino/20/D22-2020-120/D22-2020-120_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
+  render() {
+    const { products } = this.state;
+    return (
+      <ProductList>
+        {products.map(product => (
+          <li key={product.id}>
+            <img
+              src={product.image}
+              alt={product.title}
+            />
+            <strong>{product.title}</strong>
+            <span>{product.priceFormatted}</span>
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
+            <button type="button">
+              <div>
+                <MdAddShoppingCart size={16} color="#FFF" /> 3
           </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-olympikus-exact-masculino/20/D22-2020-120/D22-2020-120_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
+              <span>ADICIONAR AO CARRINHO</span>
+            </button>
+          </li>
+        ))}
 
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-      <li>
-        <img
-          src="https://static.netshoes.com.br/produtos/tenis-olympikus-exact-masculino/20/D22-2020-120/D22-2020-120_detalhe1.jpg?resize=280:280"
-          alt="tenis"
-        />
-        <strong>Tênis muito legal</strong>
-        <span>R$129,90</span>
-
-        <button type="button">
-          <div>
-            <MdAddShoppingCart size={16} color="#FFF" /> 3
-          </div>
-          <span>ADICIONAR AO CARRINHO</span>
-        </button>
-      </li>
-    </ProductList>
-  );
+      </ProductList >
+    );
+  }
 }
